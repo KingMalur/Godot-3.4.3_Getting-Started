@@ -43,7 +43,7 @@ func _process(delta):
 		$AnimatedSprite.flip_h = false
 
 
-func _on_Player_body_entered(body):
+func _on_Player_body_entered(_body):
 	hide()
 	emit_signal("hit")
 	
