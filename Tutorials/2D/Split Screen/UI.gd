@@ -4,7 +4,6 @@ var player_id = 0
 
 
 func _ready():
-	var viewport = get_parent()
 	$CanvasLayer_UI/Button.connect("button_up", self, "_on_Button_button_up")
 
 

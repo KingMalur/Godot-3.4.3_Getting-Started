@@ -1,5 +1,8 @@
 extends Node
 
+export (PackedScene) var viewport_scene
+export (PackedScene) var level_scene
+
 onready var viewport1 = $SplitScreenContainer/ViewportContainer1/Viewport1
 onready var viewport2 = $SplitScreenContainer/ViewportContainer2/Viewport2
 onready var camera1 = $SplitScreenContainer/ViewportContainer1/Viewport1/Camera2D1
@@ -8,17 +11,34 @@ onready var world = $SplitScreenContainer/ViewportContainer1/Viewport1/Level
 onready var button1 = $SplitScreenContainer/ViewportContainer1/Viewport1/UI
 onready var button2 = $SplitScreenContainer/ViewportContainer2/Viewport2/UI
 
+onready var viewport_container = $SplitScreenContainer
 
 func _ready():
-	viewport2.world_2d = viewport1.world_2d
-	$MiniMap/Viewport.world_2d = viewport1.world_2d
+	var level_node
+	for number in [1, 2]:
+		var viewport = viewport_scene.instance()
+		var viewport_root = viewport.get_node("Viewport")
+		
+		if number == 1:
+			var level = level_scene.instance()
+			viewport_root.add_child(level)
+			level_node = viewport_root
+			$MiniMap/Viewport.world_2d = viewport_root.world_2d
+		else:
+			viewport_root.world_2d = level_node.world_2d
+			
+		var player = viewport_root.get_node("Player%s" % number)
+		var button = viewport.get_node("UI")
+		#button.player = number
+		
+		viewport_container.add_child(viewport)
 	
-	button1.player_id = world.get_node("Player1").player
-	button2.player_id = world.get_node("Player2").player
+	#button1.player_id = world.get_node("Player1").player
+	#button2.player_id = world.get_node("Player2").player
 	
-	camera1.target = world.get_node("Player1")
-	camera2.target = world.get_node("Player2")
-	set_camera_limits()
+	#camera1.target = world.get_node("Player1")
+	#camera2.target = world.get_node("Player2")
+	#set_camera_limits()
 
 
 func set_camera_limits():
