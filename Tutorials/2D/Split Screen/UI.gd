@@ -3,7 +3,9 @@ extends Control
 var player_id = 0
 
 
-func _ready():
+func initialize(id):
+	player_id = id
+	#warning-ignore:return_value_discarded
 	$CanvasLayer_UI/Button.connect("button_up", self, "_on_Button_button_up")
 
 
